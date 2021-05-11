@@ -1,14 +1,17 @@
 <template>
-  <section class="login-card">
+  <section class="card login-card">
     <img :src="logo" alt="Mondo Robot">
-    <label v-if="isRegister" for="fullname-input">Full Name</label>
-    <input v-if="isRegister" type="text" id="fullname-input">
-    <label for="email-input">Email</label>
-    <input type="email" id="email-input">
-    <label for="password-input">Password</label>
-    <input type="password" id="password-input">
-    <button class="btn">Log in</button>
-    <button class="btn-secondary" @click="isRegister = true">Register</button>
+    <form @submit="checkForm">
+      <label v-if="isRegister" for="fullname-input">Full Name</label>
+      <input v-if="isRegister" type="text" id="fullname-input" name="fullname" v-model="fullName">
+      <label for="email-input">Email</label>
+      <input type="email" id="email-input" name="email" v-model="email">
+      <label for="password-input">Password</label>
+      <input type="password" id="password-input" name="password" v-model="password">
+      <button class="btn" @click="handleLogin" :type="isRegister? 'button' : 'submit'">Log in</button>
+      <button class="btn-secondary" @click="handleRegister" :type="isRegister ? 'submit' : 'button'">Register</button>
+      <p v-for="(error, index) in formErrors" :key="index">{{error}}</p>
+    </form>
   </section>
 </template>
 
@@ -20,26 +23,65 @@ export default {
     return {
       logo,
       isRegister: false,
+      fullName: null,
+      email: null,
+      password: null,
+      formErrors: [],
     };
+  },
+  methods: {
+    checkForm(e) {
+      this.formErrors = [];
+      if (this.isRegister) {
+        if (this.fullName && this.email && this.password) {
+          return;
+        }
+      }
+      if (this.email && this.password) {
+        return;
+      }
+      if (!this.fullName) {
+        this.formErrors.push('Full name is required');
+      }
+      if (!this.email) {
+        this.formErrors.push('Valid email address is required');
+      }
+      if (!this.password) {
+        this.formErrors.push('Password is required');
+      }
+      e.preventDefault();
+    },
+    handleLogin(e) {
+      if (this.isRegister) {
+        this.formErrors = [];
+        this.isRegister = false;
+        e.preventDefault();
+      } else {
+        // TO DO - handle login
+      }
+    },
+    handleRegister(e) {
+      if (!this.isRegister) {
+        this.formErrors = [];
+        this.isRegister = true;
+        e.preventDefault();
+      } else {
+        // TO DO - handle register new user
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .login-card {
-  align-items: center;
-  background-color: $white;
-  border-radius: $border-radius;
-  border: 1px solid $gray-1;
-  box-shadow: 0px 23px 30px -9px rgba(0, 0, 0, 0.17);
-  display: flex;
-  flex-direction: column;
   max-width: 607px;
   margin: 0 auto;
   padding: 54px;
   img {
     height: 91px;
-    margin: 84px 0;
+    margin-top: 26px;
+    margin-bottom: 84px;
     width: 233px;
   }
   input {
@@ -57,9 +99,11 @@ export default {
 
   @media (max-width: $breakpoint-sm) {
     height: 100vh;
+    padding: 24px;
     img {
       height: 65px;
-      margin: 74px 0;
+      margin-top: 50px;
+      margin-bottom: 77px;
       width: 165px;
     }
     input {
