@@ -28,6 +28,7 @@ label {
 	border-radius: $border-radius;
 	border: none;
 	color: $white;
+	cursor: pointer;
 	font-size: $font-size-22;
 	font-weight: bold;
 	height: 64px;
@@ -54,6 +55,15 @@ label {
 		background-color: $gray-3;
 		color: $white;
 	}
+}
+
+.btn-link {
+	background-color: transparent;
+	border: none;
+	color: $gray-3;
+	cursor: pointer;
+	font-size: $font-size-20;
+	text-decoration: underline;
 }
 
 .card {

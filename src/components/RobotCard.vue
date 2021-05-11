@@ -1,12 +1,12 @@
 <template>
   <div class="card robot-card">
-        <h3 class="card-title">{{ robot.name }}</h3>
-        <img src="../assets/Wall-E.png" :alt="robot.name">
-        <div class="btn-row">
-          <button class="btn" type="button" @click="handleEdit">Edit</button>
-          <button class="btn-secondary" type="button" @click="handleDelete">Delete</button>
-        </div>
-      </div>
+    <h3 class="card-title">{{ robot.name }}</h3>
+    <img src="../assets/Wall-E.png" :alt="robot.name">
+    <div class="btn-row">
+      <button class="btn" type="button" @click="handleEdit">Edit</button>
+      <button class="btn-secondary" type="button" @click="handleDelete">Delete</button>
+    </div>
+  </div>
 </template>
 
 <script>
