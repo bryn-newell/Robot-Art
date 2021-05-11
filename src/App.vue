@@ -1,8 +1,7 @@
 <template>
   <main id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
+      <router-link to="/">Admin</router-link> |
       <router-link to="/login">Log in</router-link>
     </div>
     <router-view/>
@@ -34,5 +33,10 @@
       color: #42b983;
     }
   }
+}
+
+.page-heading {
+  margin: 64px 0;
+  text-align: left;
 }
 </style>
