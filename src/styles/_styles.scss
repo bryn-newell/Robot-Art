@@ -1,0 +1,44 @@
+.btn {
+	background-color: $gray-3;
+	border-radius: $border-radius;
+	border: none;
+	color: $white;
+	font-size: $font-size-22;
+	font-weight: bold;
+	height: 64px;
+	width: 100%;
+	&:hover {
+		background-color: $gray-2;
+	}
+	&:disabled {
+		background-color: $gray-1;
+		border: none;
+		color: $gray-3;
+	}
+}
+
+.btn-secondary {
+	@extend .btn;
+	background-color: $white;
+	border: 2px solid $gray-3;
+	color: $gray-3;
+	&:hover {
+		background-color: $gray-0;
+	}
+	&:active {
+		background-color: $gray-3;
+		color: $white;
+	}
+}
+
+input {
+	border-radius: $border-radius;
+	border: 1px solid $gray-1;
+	height: 64px;
+	width: 100%;
+}
+
+label {
+	color: $gray-2;
+	font-size: $font-size-18;
+}
