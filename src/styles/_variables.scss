@@ -1,0 +1,34 @@
+// Colors
+$white: #FFF;
+$gray-0: #F4F6F8;
+$gray-1: #D8DADB;
+$gray-2: #737475;
+$gray-3: #414242;
+
+// Breakpoints
+$breakpoint-xs: 0px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1296px;
+
+$breakpoints: ();
+$breakpoints: map-merge(
+	(
+		"xs": $breakpoint-xs,
+		"sm": $breakpoint-sm,
+		"md": $breakpoint-md,
+		"lg": $breakpoint-lg,
+		"xl": $breakpoint-xl
+	),
+	$breakpoints
+);
+
+// Type
+// Based on a root font-size of 16px for 1rem
+$font-size-60: 3.75rem;
+$font-size-40: 2.5rem;
+$font-size-22: 1.375rem;
+
+// Styles
+$border-radius-base: 8px;
