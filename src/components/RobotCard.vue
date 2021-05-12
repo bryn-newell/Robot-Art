@@ -24,18 +24,18 @@ export default {
   computed: {
     ...mapState([
       'totalVotes',
+      'currentUserVoted',
+      'selectedRobot',
     ]),
     isSelectedRobot() {
-      // TO DO
-      return false;
+      return this.selectedRobot === this.robot.name;
     },
     resultsBarWidth() {
       const percentage = (this.robot.votes / this.totalVotes) * 100;
       return `${percentage}%`;
     },
     voteCast() {
-      // TO DO
-      return false;
+      return this.currentUserVoted;
     },
   },
   methods: {
@@ -46,7 +46,7 @@ export default {
       // TO DO
     },
     handleVote() {
-      // TO DO
+      this.$store.commit('voteForRobot', this.robot.name);
     },
   },
   props: {

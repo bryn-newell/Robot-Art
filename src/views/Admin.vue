@@ -11,17 +11,13 @@
 <script>
 import RobotCard from '@/components/RobotCard.vue';
 import UploadCard from '@/components/UploadCard.vue';
-import { mapState } from 'vuex';
+import RobotMixin from '@/components/mixins/RobotMixin.vue';
 
 export default {
   components: {
     RobotCard,
     UploadCard,
   },
-  computed: {
-    ...mapState([
-      'robots',
-    ]),
-  },
+  mixins: [RobotMixin],
 };
 </script>
