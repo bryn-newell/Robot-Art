@@ -76,6 +76,24 @@ label {
 	flex-direction: column;
 }
 
+.card-row {
+    display: flex;
+    flex-wrap: wrap;
+	margin-right: -24px;
+    width: 100%;
+    .card {
+      margin-bottom: 34px;
+	  margin-right: 24px;
+    }
+    @media (max-width: 874px) {
+      justify-content: center;
+	  margin-right: 0;
+	  .card {
+		  margin-right: 0;
+	  }
+    }
+  }
+
 .container {
 	max-width: 1468px;
 	margin: 0 auto;

@@ -1,5 +1,6 @@
 <template>
   <section class="card login-card">
+    <h1 class="sr-only">{{this.isRegister ? 'Register' : 'Log in'}}</h1>
     <img :src="logo" alt="Mondo Robot">
     <form @submit="checkForm">
       <label v-if="isRegister" for="fullname-input">Full Name</label>
@@ -76,7 +77,7 @@ export default {
 <style lang="scss">
 .login-card {
   max-width: 607px;
-  margin: 0 auto;
+  margin: 97px auto 0 auto;
   padding: 54px;
   img {
     height: 91px;
@@ -100,6 +101,7 @@ export default {
   @media (max-width: $breakpoint-sm) {
     height: 100vh;
     padding: 24px;
+    margin: 0;
     img {
       height: 65px;
       margin-top: 50px;
