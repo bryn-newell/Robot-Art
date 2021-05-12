@@ -7,12 +7,12 @@
       <div class="image-upload-container">
         <label for="image-upload" class="image-label">
           <uploadIcon />
-          <div>Select image to upload</div>
+          <div v-html="uploadText"></div>
         </label>
         <input @change="handleFileChange" type="file" id="image-upload" name="image" accept="image/*">
       </div>
       <div class="btn-row">
-        <button class="btn-link">Clear</button>
+        <button class="btn-link" @click="clearUpload">Clear</button>
         <button class="btn" :disabled="!hasRobotData">Add Robot</button>
       </div>
     </form>
@@ -32,6 +32,9 @@ export default {
         return true;
       } return false;
     },
+    uploadText() {
+      return this.robotImage ? `${this.robotImage} uploaded<br> or<br> Select a new image to upload` : 'Select image to upload';
+    },
   },
   data() {
     return {
@@ -41,8 +44,13 @@ export default {
   },
   methods: {
     handleFileChange($e) {
-      const file = $e.target.files;
-      this.robotImage = file;
+      const file = $e && $e.target.files && $e.target.files[0];
+      console.log(file);
+      this.robotImage = file.name;
+    },
+    clearUpload() {
+      this.robotName = null;
+      this.robotImage = null;
     },
   },
 };
@@ -67,7 +75,7 @@ export default {
       transform: translate(-50%, -50%);
       user-select: none;
       -webkit-user-select: none;
-      white-space: nowrap;
+      width: 100%;
       z-index: 2;
     }
     #image-upload {
