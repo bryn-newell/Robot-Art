@@ -36,10 +36,13 @@ export default {
   .card-row {
     display: flex;
     flex-wrap: wrap;
-    margin-right: -25px;
+    justify-content: space-between;
+    width: 100%;
     .card {
-      margin-right: 25px;
       margin-bottom: 34px;
+    }
+    @media (max-width: 874px) {
+      justify-content: center;
     }
   }
 }

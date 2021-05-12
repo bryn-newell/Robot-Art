@@ -32,5 +32,8 @@ export default {
 .page-heading {
   margin: 64px 0;
   text-align: left;
+  @media (max-width: $breakpoint-sm) {
+    margin-left: 32px;
+  }
 }
 </style>

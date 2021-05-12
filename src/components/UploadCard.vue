@@ -63,6 +63,9 @@ export default {
   .card-heading {
     margin-bottom: 41px;
   }
+  form {
+    width: 100%;
+  }
   .image-upload-container {
     position: relative;
     .image-label {
@@ -102,6 +105,9 @@ export default {
   }
   @media (max-width: $breakpoint-sm) {
     max-width: 359px;
+    .image-upload-container #image-upload {
+      width: 311px;
+    }
   }
 }
 </style>

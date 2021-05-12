@@ -58,5 +58,15 @@ export default {
   .secondary-links {
     margin-left: auto;
   }
+  @media (max-width: $breakpoint-sm) {
+    img {
+      height: 26px;
+      width: 67px;
+    }
+    .primary-links,
+    .secondary-links {
+      display: none;
+    }
+  }
 }
 </style>

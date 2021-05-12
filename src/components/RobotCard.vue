@@ -47,6 +47,7 @@ export default {
   @media (max-width: $breakpoint-sm) {
     max-width: 359px;
     img {
+      height: 321px;
       width: 311px;
     }
   }

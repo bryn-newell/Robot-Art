@@ -77,6 +77,10 @@ label {
 }
 
 .container {
-	max-width: 1248px;
+	max-width: 1468px;
 	margin: 0 auto;
+	padding: 40px;
+	@media (max-width: $breakpoint-sm) {
+		padding: 0
+	}
   }
