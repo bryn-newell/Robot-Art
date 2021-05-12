@@ -1,12 +1,19 @@
 <template>
   <main id="app">
-    <div id="nav">
-      <router-link to="/admin">Admin</router-link> |
-      <router-link to="/login">Log in</router-link>
-    </div>
-    <router-view/>
+    <Nav />
+    <router-view class="container"/>
   </main>
 </template>
+
+<script>
+import Nav from '@/components/Nav.vue';
+
+export default {
+  components: {
+    Nav,
+  },
+};
+</script>
 
 <style lang="scss">
 @import './styles/main';
@@ -20,19 +27,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: $gray-3;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 
 .page-heading {
