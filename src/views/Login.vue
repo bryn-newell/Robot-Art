@@ -3,7 +3,7 @@
     <section class="card login-card">
       <h1 class="sr-only">{{this.isRegister ? 'Register' : 'Log in'}}</h1>
       <img :src="logo" alt="Mondo Robot">
-      <form @submit="checkForm">
+      <form @submit.prevent="checkForm">
         <label v-if="isRegister" for="fullname-input">Full Name</label>
         <input v-if="isRegister" type="text" id="fullname-input" name="fullname" v-model="fullName">
         <label for="email-input">Email</label>
@@ -33,7 +33,7 @@ export default {
     };
   },
   methods: {
-    checkForm(e) {
+    checkForm() {
       this.formErrors = [];
       if (this.isRegister) {
         if (this.fullName && this.email && this.password) {
@@ -52,7 +52,6 @@ export default {
       if (!this.password) {
         this.formErrors.push('Password is required');
       }
-      e.preventDefault();
     },
     handleLogin(e) {
       if (this.isRegister) {
@@ -60,9 +59,7 @@ export default {
         this.isRegister = false;
         e.preventDefault();
       } else {
-        // TO DO - handle login
-        // TEMPORARY
-        this.$store.commit('userLogin');
+        this.$store.commit('userLogin', { email: this.email, password: this.password });
       }
     },
     handleRegister(e) {
