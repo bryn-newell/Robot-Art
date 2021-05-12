@@ -6,19 +6,17 @@ module.exports = {
       },
     },
   },
-  configureWebpack: (config) => {
-    const resultConfig = {
-      module: {
-        rules: [
-          {
-            test: /\.svg$/,
-            use: [
-              'vue-svg-loader',
-            ],
-          },
-        ],
-      },
-    };
-    return resultConfig;
+  chainWebpack: (config) => {
+    config.module.rules.delete('svg');
+  },
+  configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.svg$/,
+          loader: 'vue-svg-loader',
+        },
+      ],
+    },
   },
 };

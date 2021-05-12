@@ -39,7 +39,7 @@ label {
 	&:disabled {
 		background-color: $gray-1;
 		border: none;
-		color: $gray-3;
+		color: rgba(65, 66, 66, 0.4);
 	}
 }
 
