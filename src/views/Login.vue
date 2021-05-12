@@ -1,18 +1,20 @@
 <template>
-  <section class="card login-card">
-    <h1 class="sr-only">{{this.isRegister ? 'Register' : 'Log in'}}</h1>
-    <img :src="logo" alt="Mondo Robot">
-    <form @submit="checkForm">
-      <label v-if="isRegister" for="fullname-input">Full Name</label>
-      <input v-if="isRegister" type="text" id="fullname-input" name="fullname" v-model="fullName">
-      <label for="email-input">Email</label>
-      <input type="email" id="email-input" name="email" v-model="email">
-      <label for="password-input">Password</label>
-      <input type="password" id="password-input" name="password" v-model="password">
-      <button class="btn" @click="handleLogin" :type="isRegister? 'button' : 'submit'">Log in</button>
-      <button class="btn-secondary" @click="handleRegister" :type="isRegister ? 'submit' : 'button'">Register</button>
-      <p v-for="(error, index) in formErrors" :key="index">{{error}}</p>
-    </form>
+  <section class="login-view">
+    <section class="card login-card">
+      <h1 class="sr-only">{{this.isRegister ? 'Register' : 'Log in'}}</h1>
+      <img :src="logo" alt="Mondo Robot">
+      <form @submit="checkForm">
+        <label v-if="isRegister" for="fullname-input">Full Name</label>
+        <input v-if="isRegister" type="text" id="fullname-input" name="fullname" v-model="fullName">
+        <label for="email-input">Email</label>
+        <input type="email" id="email-input" name="email" v-model="email">
+        <label for="password-input">Password</label>
+        <input type="password" id="password-input" name="password" v-model="password">
+        <button class="btn" @click="handleLogin" :type="isRegister? 'button' : 'submit'">Log in</button>
+        <button class="btn-secondary" @click="handleRegister" :type="isRegister ? 'submit' : 'button'">Register</button>
+        <p v-for="(error, index) in formErrors" :key="index">{{error}}</p>
+      </form>
+    </section>
   </section>
 </template>
 
@@ -59,6 +61,8 @@ export default {
         e.preventDefault();
       } else {
         // TO DO - handle login
+        // TEMPORARY
+        this.$store.commit('userLogin');
       }
     },
     handleRegister(e) {
@@ -75,9 +79,12 @@ export default {
 </script>
 
 <style lang="scss">
+.login-view {
+  padding-top: 97px;
+}
 .login-card {
   max-width: 607px;
-  margin: 97px auto 0 auto;
+  margin: 0 auto;
   padding: 54px;
   img {
     height: 91px;

@@ -1,16 +1,29 @@
 <template>
   <main id="app">
-    <Nav />
-    <router-view class="container"/>
+    <template v-if="!userAuthed">
+      <Login />
+    </template>
+    <template v-else>
+      <Nav />
+      <router-view class="container"/>
+    </template>
   </main>
 </template>
 
 <script>
 import Nav from '@/components/Nav.vue';
+import Login from '@/views/Login.vue';
+import { mapState } from 'vuex';
 
 export default {
   components: {
     Nav,
+    Login,
+  },
+  computed: {
+    ...mapState([
+      'userAuthed',
+    ]),
   },
 };
 </script>

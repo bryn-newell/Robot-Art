@@ -3,12 +3,12 @@
     <nav class="nav container">
         <img :src="logo" alt="Mondo Robot" role="presentation">
         <div class="primary-links">
-          <router-link to="/robots" class="primary">Robots</router-link>
-          <router-link to="/results" class="primary">Results</router-link>
+          <router-link to="/robots" class="primary link">Robots</router-link>
+          <router-link to="/results" class="primary link">Results</router-link>
         </div>
         <div class="secondary-links">
-          <router-link to="/admin" class="secondary">Admin</router-link>
-          <a class="secondary" href="#">Log Out</a>
+          <router-link to="/admin" class="secondary link">Admin</router-link>
+          <button class="secondary btn-link link" @click="handleLogOut">Log Out</button>
         </div>
     </nav>
   </section>
@@ -22,6 +22,11 @@ export default {
     return {
       logo,
     };
+  },
+  methods: {
+    handleLogOut() {
+      this.$store.commit('userLogout');
+    },
   },
 };
 </script>
@@ -40,7 +45,7 @@ export default {
     margin-right: 56px;
     width: 81px;
   }
-  a {
+  .link {
     color: $gray-3;
     font-size: $font-size-18;
     font-weight: bold;

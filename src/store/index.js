@@ -30,6 +30,7 @@ export default new Vuex.Store({
     totalVotes: 0,
     currentUserVoted: false,
     selectedRobot: null,
+    userAuthed: false,
   },
   mutations: {
     addRobot(state, newRobot) {
@@ -52,6 +53,12 @@ export default new Vuex.Store({
       if (robot) {
         robot.votes += 1;
       }
+    },
+    userLogin(state) {
+      state.userAuthed = true;
+    },
+    userLogout(state) {
+      state.userAuthed = false;
     },
   },
   actions: {
