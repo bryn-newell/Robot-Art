@@ -3,17 +3,17 @@
     <h3 class="card-heading">Add Robot</h3>
     <form>
       <label for="name-input">Name</label>
-      <input type="text" id="name-input" name="name">
+      <input type="text" id="name-input" name="name" v-model="robotName">
       <div class="image-upload-container">
         <label for="image-upload" class="image-label">
           <uploadIcon />
           <div>Select image to upload</div>
         </label>
-        <input type="file" id="image-upload" name="image" accept="image/*">
+        <input @change="handleFileChange" type="file" id="image-upload" name="image" accept="image/*">
       </div>
       <div class="btn-row">
         <button class="btn-link">Clear</button>
-        <button class="btn" disabled="true">Add Robot</button>
+        <button class="btn" :disabled="!hasRobotData">Add Robot</button>
       </div>
     </form>
   </div>
@@ -25,6 +25,25 @@ import uploadIcon from '@/assets/Upload.svg';
 export default {
   components: {
     uploadIcon,
+  },
+  computed: {
+    hasRobotData() {
+      if (this.robotName && this.robotImage) {
+        return true;
+      } return false;
+    },
+  },
+  data() {
+    return {
+      robotName: null,
+      robotImage: null,
+    };
+  },
+  methods: {
+    handleFileChange($e) {
+      const file = $e.target.files;
+      this.robotImage = file;
+    },
   },
 };
 </script>
