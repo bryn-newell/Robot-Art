@@ -2,28 +2,23 @@
   <section>
     <h1 class="page-heading">Robots</h1>
     <section class="card-row">
-      <RobotCard v-for="(robot,index) in robots" :robot="robot" :key="index" />
+      <RobotCard v-for="(robot,index) in robots" :robot="robot" :key="index" page="Robots" />
     </section>
   </section>
 </template>
 
 <script>
 import RobotCard from '@/components/RobotCard.vue';
+import { mapState } from 'vuex';
 
 export default {
   components: {
     RobotCard,
   },
-  data() {
-    return {
-      robots: [
-        { name: 'Bender' },
-        { name: 'Megazord' },
-        { name: 'Rosie' },
-        { name: 'Voltron' },
-        { name: 'Wall-E' },
-      ],
-    };
+  computed: {
+    ...mapState([
+      'robots',
+    ]),
   },
 };
 </script>
