@@ -5,44 +5,50 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    robotObjects: {
+    robots: {
       Bender: {
         name: 'Bender',
-        votes: 5,
+        votes: 0,
       },
       Megazord: {
         name: 'Megazord',
-        votes: 5,
+        votes: 0,
       },
       Rosie: {
         name: 'Rosie',
-        votes: 5,
+        votes: 0,
       },
       Voltron: {
         name: 'Voltron',
-        votes: 5,
+        votes: 0,
       },
-      WallE: {
+      'Wall-E': {
         name: 'Wall-E',
-        votes: 5,
+        votes: 0,
       },
     },
-    totalVotes: 25,
+    totalVotes: 0,
     currentUserVoted: false,
     selectedRobot: null,
   },
   mutations: {
-    addRobot() {
+    addRobot(state, newRobot) {
+      const { name } = newRobot;
+      Vue.set(state.robots, name, newRobot);
+    },
+    editRobot() {
       // TO DO
     },
-    removeRobot() {
-      // TO DO
+    removeRobot(state, robotName) {
+      if (state.robots[robotName]) {
+        Vue.delete(state.robots, robotName);
+      }
     },
     voteForRobot(state, robotName) {
       state.totalVotes += 1;
       state.currentUserVoted = true;
       state.selectedRobot = robotName;
-      const robot = state.robotObjects[robotName];
+      const robot = state.robots[robotName];
       if (robot) {
         robot.votes += 1;
       }

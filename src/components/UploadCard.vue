@@ -13,7 +13,7 @@
       </div>
       <div class="btn-row">
         <button class="btn-link" @click="clearUpload">Clear</button>
-        <button class="btn" :disabled="!hasRobotData">Add Robot</button>
+        <button class="btn" @click="handleAddRobot" :disabled="!hasRobotData">Add Robot</button>
       </div>
     </form>
   </div>
@@ -33,7 +33,7 @@ export default {
       } return false;
     },
     uploadText() {
-      return this.robotImage ? `${this.robotImage} uploaded<br> or<br> Select a new image to upload` : 'Select image to upload';
+      return this.robotImage ? `${this.robotImage} uploaded <br> or <br> Select a new image to upload` : 'Select image to upload';
     },
   },
   data() {
@@ -43,14 +43,22 @@ export default {
     };
   },
   methods: {
+    handleAddRobot() {
+      const robotObj = {
+        name: this.robotName,
+        votes: 0,
+      };
+      this.$store.commit('addRobot', robotObj);
+    },
     handleFileChange($e) {
       const file = $e && $e.target.files && $e.target.files[0];
       console.log(file);
       this.robotImage = file.name;
     },
-    clearUpload() {
+    clearUpload(e) {
       this.robotName = null;
       this.robotImage = null;
+      e.preventDefault();
     },
   },
 };
