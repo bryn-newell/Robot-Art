@@ -31,6 +31,7 @@ export default new Vuex.Store({
     currentUserVoted: false,
     selectedRobot: null,
     userAuthed: false,
+    isAdmin: false,
   },
   mutations: {
     addRobot(state, newRobot) {
