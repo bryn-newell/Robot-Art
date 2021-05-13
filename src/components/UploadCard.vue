@@ -28,24 +28,25 @@ export default {
   },
   computed: {
     hasRobotData() {
-      if (this.robotName && this.robotImage) {
+      if (this.robotName && this.imageName) {
         return true;
       } return false;
     },
     uploadText() {
-      return this.robotImage ? `${this.robotImage} uploaded <br> or <br> Select a new image to upload` : 'Select image to upload';
+      return this.imageName ? `${this.imageName} uploaded <br> or <br> Select a new image to upload` : 'Select image to upload';
     },
   },
   data() {
     return {
       robotName: null,
-      robotImage: null,
+      imageName: null,
+      robotFile: null,
     };
   },
   methods: {
     clearUpload(e) {
       this.robotName = null;
-      this.robotImage = null;
+      this.imageName = null;
       e.preventDefault();
     },
     checkForm() {
@@ -55,15 +56,16 @@ export default {
       const robotObj = {
         name: this.robotName,
         votes: 0,
-        imgPath: null,
+        imgPath: this.imageName,
+        file: this.robotFile,
       };
       this.$store.dispatch('addRobot', robotObj);
       e.preventDefault();
     },
-    handleFileChange($e) {
-      const file = $e && $e.target.files && $e.target.files[0];
-      console.log(file);
-      this.robotImage = file.name;
+    async handleFileChange(e) {
+      const file = e.target && e.target.files && e.target.files[0];
+      this.robotFile = file;
+      this.imageName = file.name;
     },
   },
 };

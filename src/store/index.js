@@ -36,11 +36,6 @@ const store = new Vuex.Store({
     editRobot() {
       // TO DO
     },
-    removeRobot(state, robotName) {
-      if (state.robots[robotName]) {
-        Vue.delete(state.robots, robotName);
-      }
-    },
   },
   actions: {
     async login({ dispatch }, form) {
@@ -89,9 +84,33 @@ const store = new Vuex.Store({
       });
       dispatch('fetchUserProfile', { uid: userId });
     },
-    async addRobot(context, robotObj) {
-      const { name } = robotObj;
-      await fb.robotsCollection.doc(name).set(robotObj);
+    async addRobot({ dispatch }, robotObj) {
+      const { name, file } = robotObj;
+      const newRobotObj = { ...robotObj };
+      delete newRobotObj.file;
+      await fb.robotsCollection.doc(name).set(newRobotObj);
+      dispatch('uploadRobotImage', file);
+      // to do
+    },
+    async removeRobot(context, robotName) {
+      await fb.robotsCollection.doc(robotName).delete();
+    },
+    async uploadRobotImage(context, file) {
+      try {
+        if (file && file.name) {
+          const filePath = `robotImages/${file.name}`;
+          const metadata = { contentType: file.type };
+
+          await fb.fbStorage.ref()
+            .child(filePath)
+            .put(file, metadata);
+          console.log('filePath: ', filePath);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.processing = false;
+      }
     },
   },
 });

@@ -40,12 +40,12 @@ export default {
   },
   methods: {
     handleDelete() {
-      this.$store.commit('removeRobot', this.robot.name);
+      this.$store.dispatch('removeRobot', this.robot.name);
     },
     handleEdit() {
       // TO DO
       const newRobotObj = {};
-      this.$store.commit('editRobot', newRobotObj);
+      this.$store.dispatch('editRobot', newRobotObj);
     },
     handleVote() {
       this.$store.dispatch('submitVote', this.robot.name);
