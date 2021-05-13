@@ -1,6 +1,6 @@
 <template>
   <main id="app">
-    <Nav v-if="showNav" />
+    <Nav v-show="showNav" />
     <router-view class="container"/>
   </main>
 </template>
@@ -26,6 +26,7 @@ export default {
 
 <style lang="scss">
 @import './styles/main';
+
 #app {
   background-color: $gray-0;
   color: $gray-3;

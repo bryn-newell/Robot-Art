@@ -38,6 +38,12 @@ export default new Vuex.Store({
   mutations: {
     setUser(state, user) {
       state.user = user;
+      if (user.hasVoted === true) {
+        state.currentUserVoted = true;
+      }
+      if (user.selectedRobot) {
+        state.selectedRobot = user.selectedRobot;
+      }
     },
     addRobot(state, newRobot) {
       const { name } = newRobot;
@@ -69,12 +75,16 @@ export default new Vuex.Store({
     async fetchUserProfile({ commit }, user) {
       const userProfile = await fb.usersCollection.doc(user.uid).get();
       commit('setUser', userProfile.data());
-      router.push('/robots');
+      // Leaves user on current page if reload/refresh or sends to Robots view from login/regsiter
+      if (router.currentRoute.path === '/') {
+        router.push('/robots');
+      }
     },
     async registerUser({ dispatch }, form) {
       const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password);
       await fb.usersCollection.doc(user.uid).set({
         fullName: form.fullName,
+        hasVoted: false,
       });
       dispatch('fetchUserProfile', user);
     },
@@ -82,6 +92,18 @@ export default new Vuex.Store({
       await fb.auth.signOut();
       commit('setUser', null);
       router.push('/');
+    },
+    submitVote({ commit, dispatch }, robotName) {
+      dispatch('updateUserVote', robotName);
+      commit('voteForRobot', robotName);
+    },
+    async updateUserVote({ dispatch }, robotName) {
+      const userId = fb.auth.currentUser.uid;
+      await fb.usersCollection.doc(userId).update({
+        hasVoted: true,
+        selectedRobot: robotName,
+      });
+      dispatch('fetchUserProfile', { uid: userId });
     },
   },
 });

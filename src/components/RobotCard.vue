@@ -48,7 +48,7 @@ export default {
       this.$store.commit('editRobot', newRobotObj);
     },
     handleVote() {
-      this.$store.commit('voteForRobot', this.robot.name);
+      this.$store.dispatch('submitVote', this.robot.name);
     },
   },
   props: {

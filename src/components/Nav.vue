@@ -84,10 +84,17 @@ export default {
       font-weight: normal;
       font-size: $font-size-16;
     }
+    &.secondary.btn-link {
+      margin-right: 0;
+    }
   }
   .secondary-links {
     margin-left: auto;
   }
+  .menu-btn {
+    display: none;
+  }
+
   @media (max-width: $breakpoint-sm) {
     img {
       height: 26px;
@@ -99,6 +106,7 @@ export default {
       display: none;
     }
     .menu-btn {
+      display: inline-block;
       margin-left: auto;
       margin-right: 30px
     }
