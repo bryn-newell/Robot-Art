@@ -30,21 +30,15 @@ const store = new Vuex.Store({
     setRobots(state, robots) {
       state.robots = robots;
     },
+    setTotalVotes(state, totalVotes) {
+      state.totalVotes = totalVotes;
+    },
     editRobot() {
       // TO DO
     },
     removeRobot(state, robotName) {
       if (state.robots[robotName]) {
         Vue.delete(state.robots, robotName);
-      }
-    },
-    voteForRobot(state, robotName) {
-      state.totalVotes += 1;
-      state.currentUserVoted = true;
-      state.selectedRobot = robotName;
-      const robot = state.robots[robotName];
-      if (robot) {
-        robot.votes += 1;
       }
     },
   },
@@ -75,9 +69,17 @@ const store = new Vuex.Store({
       commit('setUser', null);
       router.push('/');
     },
-    submitVote({ commit, dispatch }, robotName) {
+    async submitVote({ dispatch }, robotName) {
+      const robotRef = fb.robotsCollection.doc(robotName);
+      const robotDoc = await robotRef.get();
+      const robotData = robotDoc && robotDoc.data();
+      let votes;
+      if (robotData && robotData.votes) {
+        votes = robotData.votes + 1;
+      }
+      await robotRef.update({ votes });
+
       dispatch('updateUserVote', robotName);
-      commit('voteForRobot', robotName);
     },
     async updateUserVote({ dispatch }, robotName) {
       const userId = fb.auth.currentUser.uid;
@@ -87,8 +89,7 @@ const store = new Vuex.Store({
       });
       dispatch('fetchUserProfile', { uid: userId });
     },
-    // eslint-disable-next-line no-unused-vars
-    async addRobot({ state }, robotObj) {
+    async addRobot(context, robotObj) {
       const { name } = robotObj;
       await fb.robotsCollection.doc(name).set(robotObj);
     },
@@ -98,13 +99,15 @@ const store = new Vuex.Store({
 // realtime firebase
 fb.robotsCollection.onSnapshot((snapshot) => {
   const robotsArray = [];
+  let totalVotes = 0;
 
   snapshot.forEach((doc) => {
     const robot = doc.data();
     robot.id = doc.id;
-
+    totalVotes += robot.votes;
     robotsArray.push(robot);
   });
+  store.commit('setTotalVotes', totalVotes);
   store.commit('setRobots', robotsArray);
 });
 
