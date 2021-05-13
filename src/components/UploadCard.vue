@@ -47,6 +47,7 @@ export default {
     clearUpload(e) {
       this.robotName = null;
       this.imageName = null;
+      this.robotFile = null;
       e.preventDefault();
     },
     checkForm() {
