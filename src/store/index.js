@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import * as fb from '../firebase';
+import router from '../router/index';
 
 Vue.use(Vuex);
 
@@ -32,6 +34,7 @@ export default new Vuex.Store({
     selectedRobot: null,
     userAuthed: false,
     isAdmin: false,
+    user: {},
   },
   mutations: {
     addRobot(state, newRobot) {
@@ -61,9 +64,26 @@ export default new Vuex.Store({
     userLogout(state) {
       state.userAuthed = false;
     },
+    setUser(state, user) {
+      state.user = user;
+    }
   },
   actions: {
-  },
-  modules: {
+    async login({ dispatch }, form) {
+      const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password);
+      dispatch('fetchUserProfile', user);
+    },
+    async fetchUserProfile({ commit }, user) {
+      const userProfile = await fb.usersCollection.doc(user.uid).get();
+      commit('setUser', userProfile.data());
+      router.push('/robots');
+    },
+    async registerUser({ dispatch }, form) {
+      const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password)
+      await fb.usersCollection.doc(user.uid).set({
+        fullName: form.fullName,
+      })
+      dispatch('fetchUserProfile', user)
+    },
   },
 });

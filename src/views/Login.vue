@@ -68,7 +68,11 @@ export default {
         this.isRegister = true;
         e.preventDefault();
       } else {
-        // TO DO - handle register new user
+        this.$store.dispatch('registerUser', {
+          email: this.email,
+          password: this.password,
+          fullName: this.fullName,
+        })
       }
     },
   },
