@@ -7,6 +7,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    user: null,
+    isAdmin: false,
     robots: {
       Bender: {
         name: 'Bender',
@@ -32,11 +34,11 @@ export default new Vuex.Store({
     totalVotes: 0,
     currentUserVoted: false,
     selectedRobot: null,
-    userAuthed: false,
-    isAdmin: false,
-    user: {},
   },
   mutations: {
+    setUser(state, user) {
+      state.user = user;
+    },
     addRobot(state, newRobot) {
       const { name } = newRobot;
       Vue.set(state.robots, name, newRobot);
@@ -58,15 +60,6 @@ export default new Vuex.Store({
         robot.votes += 1;
       }
     },
-    userLogin(state) {
-      state.userAuthed = true;
-    },
-    userLogout(state) {
-      state.userAuthed = false;
-    },
-    setUser(state, user) {
-      state.user = user;
-    }
   },
   actions: {
     async login({ dispatch }, form) {
@@ -79,11 +72,16 @@ export default new Vuex.Store({
       router.push('/robots');
     },
     async registerUser({ dispatch }, form) {
-      const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password)
+      const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password);
       await fb.usersCollection.doc(user.uid).set({
         fullName: form.fullName,
-      })
-      dispatch('fetchUserProfile', user)
+      });
+      dispatch('fetchUserProfile', user);
+    },
+    async logout({ commit }) {
+      await fb.auth.signOut();
+      commit('setUser', null);
+      router.push('/');
     },
   },
 });

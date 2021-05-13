@@ -59,7 +59,7 @@ export default {
         this.isRegister = false;
         e.preventDefault();
       } else {
-        this.$store.commit('userLogin', { email: this.email, password: this.password });
+        this.$store.dispatch('login', { email: this.email, password: this.password });
       }
     },
     handleRegister(e) {
@@ -72,7 +72,7 @@ export default {
           email: this.email,
           password: this.password,
           fullName: this.fullName,
-        })
+        });
       }
     },
   },

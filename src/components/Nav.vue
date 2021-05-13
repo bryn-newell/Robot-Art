@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     handleLogOut() {
-      this.$store.commit('userLogout');
+      this.$store.dispatch('logout');
     },
     handleNavigation(path) {
       this.mobileNavActive = false;

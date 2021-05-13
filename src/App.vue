@@ -1,36 +1,31 @@
 <template>
   <main id="app">
-    <template v-if="!userAuthed">
-      <Login />
-    </template>
-    <template v-else>
-      <Nav />
-      <router-view class="container"/>
-    </template>
+    <Nav v-if="showNav" />
+    <router-view class="container"/>
   </main>
 </template>
 
 <script>
-import Nav from '@/components/Nav.vue';
-import Login from '@/views/Login.vue';
 import { mapState } from 'vuex';
+import Nav from '@/components/Nav.vue';
 
 export default {
   components: {
     Nav,
-    Login,
   },
   computed: {
     ...mapState([
-      'userAuthed',
+      'user',
     ]),
+    showNav() {
+      return !!this.user;
+    },
   },
 };
 </script>
 
 <style lang="scss">
 @import './styles/main';
-
 #app {
   background-color: $gray-0;
   color: $gray-3;
