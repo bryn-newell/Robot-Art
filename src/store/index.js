@@ -5,32 +5,11 @@ import router from '../router/index';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     user: null,
     isAdmin: false,
-    robots: {
-      Bender: {
-        name: 'Bender',
-        votes: 0,
-      },
-      Megazord: {
-        name: 'Megazord',
-        votes: 0,
-      },
-      Rosie: {
-        name: 'Rosie',
-        votes: 0,
-      },
-      Voltron: {
-        name: 'Voltron',
-        votes: 0,
-      },
-      'Wall-E': {
-        name: 'Wall-E',
-        votes: 0,
-      },
-    },
+    robots: [],
     totalVotes: 0,
     currentUserVoted: false,
     selectedRobot: null,
@@ -38,16 +17,18 @@ export default new Vuex.Store({
   mutations: {
     setUser(state, user) {
       state.user = user;
-      if (user.hasVoted === true) {
+      if (user && user.hasVoted) {
         state.currentUserVoted = true;
       }
-      if (user.selectedRobot) {
+      if (user && user.selectedRobot) {
         state.selectedRobot = user.selectedRobot;
       }
+      if (user && user.isAdmin) {
+        state.isAdmin = true;
+      }
     },
-    addRobot(state, newRobot) {
-      const { name } = newRobot;
-      Vue.set(state.robots, name, newRobot);
+    setRobots(state, robots) {
+      state.robots = robots;
     },
     editRobot() {
       // TO DO
@@ -84,6 +65,7 @@ export default new Vuex.Store({
       const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password);
       await fb.usersCollection.doc(user.uid).set({
         fullName: form.fullName,
+        isAdmin: false,
         hasVoted: false,
       });
       dispatch('fetchUserProfile', user);
@@ -105,5 +87,25 @@ export default new Vuex.Store({
       });
       dispatch('fetchUserProfile', { uid: userId });
     },
+    // eslint-disable-next-line no-unused-vars
+    async addRobot({ state }, robotObj) {
+      const { name } = robotObj;
+      await fb.robotsCollection.doc(name).set(robotObj);
+    },
   },
 });
+
+// realtime firebase
+fb.robotsCollection.onSnapshot((snapshot) => {
+  const robotsArray = [];
+
+  snapshot.forEach((doc) => {
+    const robot = doc.data();
+    robot.id = doc.id;
+
+    robotsArray.push(robot);
+  });
+  store.commit('setRobots', robotsArray);
+});
+
+export default store;

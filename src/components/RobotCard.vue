@@ -70,11 +70,13 @@ export default {
   padding: 24px;
   img {
     height: 321px;
+    margin-top: 20px;
     width: 349px;
   }
   .btn-row {
     display: flex;
     justify-content: space-between;
+    margin-top: auto;
     width: 100%;
     .btn {
       margin-right: 24px;

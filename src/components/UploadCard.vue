@@ -1,7 +1,7 @@
 <template>
   <div class="card upload-card">
     <h3 class="card-heading">Add Robot</h3>
-    <form>
+    <form @submit.prevent="checkForm">
       <label for="name-input">Name</label>
       <input type="text" id="name-input" name="name" v-model="robotName">
       <div class="image-upload-container">
@@ -12,8 +12,8 @@
         <input @change="handleFileChange" type="file" id="image-upload" name="image" accept="image/*">
       </div>
       <div class="btn-row">
-        <button class="btn-link" @click="clearUpload">Clear</button>
-        <button class="btn" @click="handleAddRobot" :disabled="!hasRobotData">Add Robot</button>
+        <button class="btn-link" @click="clearUpload" type="button">Clear</button>
+        <button class="btn" @click="handleAddRobot" :disabled="!hasRobotData" type="submit">Add Robot</button>
       </div>
     </form>
   </div>
@@ -43,22 +43,27 @@ export default {
     };
   },
   methods: {
-    handleAddRobot() {
+    clearUpload(e) {
+      this.robotName = null;
+      this.robotImage = null;
+      e.preventDefault();
+    },
+    checkForm() {
+      // TO DO
+    },
+    handleAddRobot(e) {
       const robotObj = {
         name: this.robotName,
         votes: 0,
+        imgPath: null,
       };
-      this.$store.commit('addRobot', robotObj);
+      this.$store.dispatch('addRobot', robotObj);
+      e.preventDefault();
     },
     handleFileChange($e) {
       const file = $e && $e.target.files && $e.target.files[0];
       console.log(file);
       this.robotImage = file.name;
-    },
-    clearUpload(e) {
-      this.robotName = null;
-      this.robotImage = null;
-      e.preventDefault();
     },
   },
 };
