@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import logo from '@/assets/Logo.png';
+import logo from '@/assets/logo.png';
 import hamburgerIcon from '@/assets/Hamburger.svg';
 import closeIcon from '@/assets/Close.svg';
 import { mapState } from 'vuex';
