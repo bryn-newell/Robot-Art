@@ -1,7 +1,7 @@
 <template>
   <main id="app">
-    <Nav v-show="true" />
-    <router-view class="container"/>
+    <Nav v-show="true" :mobileNavActive="mobileNavActive" @open-nav="mobileNavActive = true" @close-nav="mobileNavActive = false" />
+    <router-view v-show="!mobileNavActive" class="container"/>
   </main>
 </template>
 
@@ -20,6 +20,11 @@ export default {
     showNav() {
       return !!this.user;
     },
+  },
+  data() {
+    return {
+      mobileNavActive: false,
+    };
   },
 };
 </script>

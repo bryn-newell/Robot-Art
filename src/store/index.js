@@ -38,6 +38,7 @@ const store = new Vuex.Store({
     },
   },
   actions: {
+    // Users
     async login({ dispatch }, form) {
       let user;
       // Since GCP auth doesn't have username/email sing in methods by default this is a temporary (to be changed in the future) hack to allow a username only for the Admin
@@ -74,6 +75,8 @@ const store = new Vuex.Store({
       commit('setUser', null);
       router.push('/');
     },
+
+    // Voting
     async submitVote({ dispatch }, robotName) {
       const robotRef = fb.robotsCollection.doc(robotName);
       const robotDoc = await robotRef.get();
@@ -95,6 +98,8 @@ const store = new Vuex.Store({
       });
       dispatch('fetchUserProfile', { uid: userId });
     },
+
+    // Robots
     async fetchAllRobots({ commit, dispatch }) {
       const robotsArray = [];
       await fb.robotsCollection.get().then((querySnapshot) => {

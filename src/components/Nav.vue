@@ -10,14 +10,14 @@
           <router-link v-if="isAdmin" to="/admin" class="secondary link">Admin</router-link>
           <button class="secondary btn-link link" @click="handleLogOut">Log Out</button>
         </div>
-        <button class="btn-link menu-btn" @click="mobileNavActive = true"><hamburgerIcon /></button>
+        <button class="btn-link menu-btn" @click="openMobileNav"><hamburgerIcon /></button>
     </nav>
-    <nav class="mobile-nav" v-if="mobileNavActive">
-      <button class="btn-link close-btn" type="button" @click="mobileNavActive = false"><closeIcon /></button>
-      <a class="link" @click="handleNavigation('robots')">Robots</a>
-      <a class="link" @click="handleNavigation('results')">Results</a>
-      <a v-if="isAdmin" @click="handleNavigation('admin')" class="link">Admin</a>
-      <button class="btn-link link" type="button" @click="handleLogOut">Log Out</button>
+    <nav class="mobile-nav" :class="{'active': mobileNavActive}" :aria-hidden="mobileNavActive ? false : true" >
+      <button class="btn-link close-btn" type="button" @click="closeMobileNav" :tabindex="mobileNavActive ? 0 : -1"><closeIcon /></button>
+      <a class="link" @click="handleNavigation('robots')" @keypress.enter="handleNavigation('robots')" :tabindex="mobileNavActive ? 0 : -1">Robots</a>
+      <a class="link" @click="handleNavigation('results')" @keypress.enter="handleNavigation('results')" :tabindex="mobileNavActive ? 0 : -1">Results</a>
+      <a v-if="isAdmin" @click="handleNavigation('admin')" @keypress.enter="handleNavigation('admin')" class="link" :tabindex="mobileNavActive ? 0 : -1">Admin</a>
+      <button class="btn-link link" type="button" @click="handleLogOut" :tabindex="mobileNavActive ? 0 : -1">Log Out</button>
     </nav>
   </section>
 </template>
@@ -41,7 +41,6 @@ export default {
   data() {
     return {
       logo,
-      mobileNavActive: false,
     };
   },
   methods: {
@@ -49,8 +48,20 @@ export default {
       this.$store.dispatch('logout');
     },
     handleNavigation(path) {
-      this.mobileNavActive = false;
+      this.closeMobileNav();
       this.$router.push(`/${path}`);
+    },
+    openMobileNav() {
+      this.$emit('open-nav');
+    },
+    closeMobileNav() {
+      this.$emit('close-nav');
+    },
+  },
+  props: {
+    mobileNavActive: {
+      type: Boolean,
+      required: true,
     },
   },
 };
@@ -116,13 +127,20 @@ export default {
   align-items: center;
   background-color: $gray-3;
   color: $gray-1;
-  display: none;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   left: 0;
   position: absolute;
+  transform: translate(100%);
+  transition: transform linear .4s;
   top: 0;
   width: 100vw;
-  z-index: 10;
+  &.active {
+    transform: translate(0);
+    z-index: 999;
+  }
+
   .link {
     color: $gray-1;
     font-size: $font-size-40;
@@ -139,10 +157,6 @@ export default {
     position: absolute;
     top: 34px;
     right: 34px;
-  }
-  @media (max-width: $breakpoint-sm) {
-    display: flex;
-    flex-direction: column;
   }
 }
 </style>
