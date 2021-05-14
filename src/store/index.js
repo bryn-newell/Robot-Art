@@ -17,16 +17,24 @@ const store = new Vuex.Store({
   },
   mutations: {
     setUser(state, user) {
-      // TO DO fix caching issue in prod for state and user refresh after new login
       state.user = user;
+
       if (user && user.hasVoted) {
         state.currentUserVoted = true;
+      } else {
+        state.currentUserVoted = false;
       }
+
       if (user && user.selectedRobot) {
         state.selectedRobot = user.selectedRobot;
+      } else {
+        state.selectedRobot = null;
       }
+
       if (user && user.isAdmin) {
         state.isAdmin = true;
+      } else {
+        state.isAdmin = false;
       }
     },
     setRobots(state, robots) {

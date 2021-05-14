@@ -12,13 +12,15 @@
         </div>
         <button class="btn-link menu-btn" @click="openMobileNav"><hamburgerIcon /></button>
     </nav>
-    <nav class="mobile-nav" :class="{'active': mobileNavActive}" :aria-hidden="mobileNavActive ? false : true" >
-      <button class="btn-link close-btn" type="button" @click="closeMobileNav" :tabindex="mobileNavActive ? 0 : -1"><closeIcon /></button>
-      <a class="link" @click="handleNavigation('robots')" @keypress.enter="handleNavigation('robots')" :tabindex="mobileNavActive ? 0 : -1">Robots</a>
-      <a class="link" @click="handleNavigation('results')" @keypress.enter="handleNavigation('results')" :tabindex="mobileNavActive ? 0 : -1">Results</a>
-      <a v-if="isAdmin" @click="handleNavigation('admin')" @keypress.enter="handleNavigation('admin')" class="link" :tabindex="mobileNavActive ? 0 : -1">Admin</a>
-      <button class="btn-link link" type="button" @click="handleLogOut" :tabindex="mobileNavActive ? 0 : -1">Log Out</button>
-    </nav>
+    <transition name="slide">
+      <nav v-if="mobileNavActive" class="mobile-nav" :class="{'active': mobileNavActive}" :aria-hidden="mobileNavActive ? false : true" >
+        <button class="btn-link close-btn" type="button" @click="closeMobileNav" :tabindex="mobileNavActive ? 0 : -1"><closeIcon /></button>
+        <a class="link" @click="handleNavigation('robots')" @keypress.enter="handleNavigation('robots')" :tabindex="mobileNavActive ? 0 : -1">Robots</a>
+        <a class="link" @click="handleNavigation('results')" @keypress.enter="handleNavigation('results')" :tabindex="mobileNavActive ? 0 : -1">Results</a>
+        <a v-if="isAdmin" @click="handleNavigation('admin')" @keypress.enter="handleNavigation('admin')" class="link" :tabindex="mobileNavActive ? 0 : -1">Admin</a>
+        <button class="btn-link link" type="button" @click="handleLogOut" :tabindex="mobileNavActive ? 0 : -1">Log Out</button>
+      </nav>
+    </transition>
   </section>
 </template>
 
@@ -70,7 +72,6 @@ export default {
 <style lang="scss">
 .nav-background {
   background-color: $white;
-  overflow: hidden;
 }
 .nav {
   align-items: center;
@@ -131,17 +132,11 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  left: 1000px;
+  left: 0;
   position: absolute;
-  transform: translate(100%);
-  transition: transform linear .4s, left ease .6s;
   top: 0;
   width: 100vw;
   z-index: 999;
-  &.active {
-    transform: translate(0);
-    left: 0;
-  }
 
   .link {
     color: $gray-1;
@@ -160,5 +155,12 @@ export default {
     top: 34px;
     right: 34px;
   }
+}
+// mobile nav transition styles
+.slide-enter-active, .slide-leave-active {
+  transition: transform .4s;
+}
+.slide-enter, .slide-leave-to {
+  transform: translate(100%);
 }
 </style>
