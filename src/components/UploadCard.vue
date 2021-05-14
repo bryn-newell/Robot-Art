@@ -1,7 +1,7 @@
 <template>
   <div class="card upload-card">
     <h3 class="card-heading">Add Robot</h3>
-    <form @submit.prevent="checkForm">
+    <form @submit.prevent="checkForm" ref="form">
       <label for="name-input">Name</label>
       <input type="text" id="name-input" name="name" v-model="robotName">
       <div class="image-upload-container">
@@ -57,10 +57,15 @@ export default {
       const robotObj = {
         name: this.robotName,
         votes: 0,
-        imgPath: this.imageName,
+        imgName: this.imageName,
         file: this.robotFile,
       };
       this.$store.dispatch('addRobot', robotObj);
+      const { form } = this.$refs;
+      form.reset();
+      this.robotName = null;
+      this.imageName = null;
+      this.robotFile = null;
       e.preventDefault();
     },
     async handleFileChange(e) {

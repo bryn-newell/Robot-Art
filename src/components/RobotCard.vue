@@ -1,7 +1,7 @@
 <template>
   <div class="card robot-card">
     <h3 class="card-title">{{ robot.name }}</h3>
-    <img src="../assets/Wall-E.png" :alt="robot.name">
+    <img :src="robot.imagePath" :alt="robot.name">
     <div class="btn-row" v-if="page === 'Admin'">
       <button class="btn" type="button" @click="handleEdit">Edit</button>
       <button class="btn-secondary" type="button" @click="handleDelete">Delete</button>

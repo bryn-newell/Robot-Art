@@ -42,9 +42,10 @@ const store = new Vuex.Store({
       const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password);
       dispatch('fetchUserProfile', user);
     },
-    async fetchUserProfile({ commit }, user) {
+    async fetchUserProfile({ commit, dispatch }, user) {
       const userProfile = await fb.usersCollection.doc(user.uid).get();
       commit('setUser', userProfile.data());
+      dispatch('fetchAllRobots');
       // Leaves user on current page if reload/refresh or sends to Robots view from login/regsiter
       if (router.currentRoute.path === '/') {
         router.push('/robots');
@@ -84,16 +85,49 @@ const store = new Vuex.Store({
       });
       dispatch('fetchUserProfile', { uid: userId });
     },
+    async fetchAllRobots({ commit, dispatch }) {
+      const robotsArray = [];
+      await fb.robotsCollection.orderBy('createdOn', 'desc').get().then((querySnapshot) => {
+        let totalVotes = 0;
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          const robot = doc.data();
+          robot.id = doc.id;
+          totalVotes += robot.votes;
+          robotsArray.push(robot);
+        });
+        commit('setTotalVotes', totalVotes);
+      });
+      dispatch('fetchAllImages', robotsArray);
+    },
+    async fetchAllImages({ commit }, robotsArray) {
+      // Download image from firebase storage
+      const newRobotsArray = [];
+      await Promise.all(robotsArray.map(async (robot) => {
+        const newRobotObj = { ...robot };
+        fb.fbStorage.ref().child(`robotImages/${robot.imgName}`).getDownloadURL()
+          .then((url) => {
+            newRobotObj.imagePath = url;
+            newRobotsArray.push(newRobotObj);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }));
+      commit('setRobots', newRobotsArray);
+    },
     async addRobot({ dispatch }, robotObj) {
       const { name, file } = robotObj;
       const newRobotObj = { ...robotObj };
       delete newRobotObj.file;
+      newRobotObj.createdOn = new Date();
       await fb.robotsCollection.doc(name).set(newRobotObj);
-      dispatch('uploadRobotImage', file);
-      // to do
+      await dispatch('uploadRobotImage', file);
+      dispatch('fetchAllRobots');
     },
-    async removeRobot(context, robotName) {
+    async removeRobot({ dispatch }, robotName) {
       await fb.robotsCollection.doc(robotName).delete();
+      dispatch('fetchAllRobots');
     },
     async uploadRobotImage(context, file) {
       try {
@@ -104,7 +138,6 @@ const store = new Vuex.Store({
           await fb.fbStorage.ref()
             .child(filePath)
             .put(file, metadata);
-          console.log('filePath: ', filePath);
         }
       } catch (error) {
         console.error(error);
@@ -113,21 +146,6 @@ const store = new Vuex.Store({
       }
     },
   },
-});
-
-// realtime firebase
-fb.robotsCollection.onSnapshot((snapshot) => {
-  const robotsArray = [];
-  let totalVotes = 0;
-
-  snapshot.forEach((doc) => {
-    const robot = doc.data();
-    robot.id = doc.id;
-    totalVotes += robot.votes;
-    robotsArray.push(robot);
-  });
-  store.commit('setTotalVotes', totalVotes);
-  store.commit('setRobots', robotsArray);
 });
 
 export default store;
