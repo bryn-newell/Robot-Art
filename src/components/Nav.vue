@@ -70,6 +70,7 @@ export default {
 <style lang="scss">
 .nav-background {
   background-color: $white;
+  overflow: hidden;
 }
 .nav {
   align-items: center;
@@ -130,15 +131,16 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  left: 0;
+  left: 1000px;
   position: absolute;
   transform: translate(100%);
-  transition: transform linear .4s;
+  transition: transform linear .4s, left ease .6s;
   top: 0;
   width: 100vw;
+  z-index: 999;
   &.active {
     transform: translate(0);
-    z-index: 999;
+    left: 0;
   }
 
   .link {

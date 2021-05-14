@@ -17,6 +17,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     setUser(state, user) {
+      // TO DO fix caching issue in prod for state and user refresh after new login
       state.user = user;
       if (user && user.hasVoted) {
         state.currentUserVoted = true;
@@ -72,7 +73,6 @@ const store = new Vuex.Store({
         .then((result) => {
           const { user } = result;
           dispatch('fetchUserProfile', user);
-          // ...
         }).catch((error) => {
           console.error(error);
           commit('setErrors', error);
