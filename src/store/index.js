@@ -39,7 +39,16 @@ const store = new Vuex.Store({
   },
   actions: {
     async login({ dispatch }, form) {
-      const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password);
+      let user;
+      // Since GCP auth doesn't have username/email sing in methods by default this is a temporary (to be changed in the future) hack to allow a username only for the Admin
+      if (form.email === 'Admin') {
+        const adminEmail = 'admin@mondorobot.com';
+        const res = await fb.auth.signInWithEmailAndPassword(adminEmail, form.password);
+        user = res.user;
+      } else {
+        const res = await fb.auth.signInWithEmailAndPassword(form.email, form.password);
+        user = res.user;
+      }
       dispatch('fetchUserProfile', user);
     },
     async fetchUserProfile({ commit, dispatch }, user) {
@@ -70,11 +79,12 @@ const store = new Vuex.Store({
       const robotDoc = await robotRef.get();
       const robotData = robotDoc && robotDoc.data();
       let votes;
-      if (robotData && robotData.votes) {
+      if (robotData && robotData.hasOwnProperty('votes')) {
         votes = robotData.votes + 1;
       }
       await robotRef.update({ votes });
 
+      dispatch('fetchAllRobots');
       dispatch('updateUserVote', robotName);
     },
     async updateUserVote({ dispatch }, robotName) {
@@ -87,7 +97,7 @@ const store = new Vuex.Store({
     },
     async fetchAllRobots({ commit, dispatch }) {
       const robotsArray = [];
-      await fb.robotsCollection.orderBy('createdOn', 'desc').get().then((querySnapshot) => {
+      await fb.robotsCollection.get().then((querySnapshot) => {
         let totalVotes = 0;
         querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots

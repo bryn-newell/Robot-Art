@@ -1,6 +1,6 @@
 <template>
   <main id="app">
-    <Nav v-show="showNav" />
+    <Nav v-show="true" />
     <router-view class="container"/>
   </main>
 </template>

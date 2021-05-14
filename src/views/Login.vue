@@ -6,8 +6,9 @@
       <form @submit.prevent="checkForm">
         <label v-if="isRegister" for="fullname-input">Full Name</label>
         <input v-if="isRegister" type="text" id="fullname-input" name="fullname" v-model="fullName">
-        <label for="email-input">Email</label>
-        <input type="email" id="email-input" name="email" v-model="email">
+        <label for="email-input">{{ useEmailLogin ? 'Email': 'Username'}}</label>
+        <input :type="useEmailLogin ? 'email': 'text'" id="email-input" name="email" v-model="email">
+        <button v-show="!isRegister" class="btn-link toggle-btn" @click="toggleLoginType" type="button">Click here to log in with {{useEmailLogin? 'username' : 'email'}} instead</button>
         <label for="password-input">Password</label>
         <input type="password" id="password-input" name="password" v-model="password">
         <button class="btn" @click="handleLogin" :type="isRegister? 'button' : 'submit'">Log in</button>
@@ -30,6 +31,7 @@ export default {
       email: null,
       password: null,
       formErrors: [],
+      useEmailLogin: true,
     };
   },
   methods: {
@@ -75,6 +77,9 @@ export default {
         });
       }
     },
+    toggleLoginType() {
+      this.useEmailLogin = !this.useEmailLogin;
+    },
   },
 };
 </script>
@@ -92,6 +97,11 @@ export default {
     margin-top: 26px;
     margin-bottom: 84px;
     width: 233px;
+  }
+  .toggle-btn {
+    display: block;
+    font-size: $font-size-16;
+    margin: -32px auto 44px auto;
   }
   input {
     margin-bottom: 44px;
