@@ -13,6 +13,7 @@
         <input type="password" id="password-input" name="password" v-model="password">
         <button class="btn" @click="handleLogin" :type="isRegister? 'button' : 'submit'">Log in</button>
         <button class="btn-secondary" @click="handleRegister" :type="isRegister ? 'submit' : 'button'">Register</button>
+        <button class="btn-secondary" @click="handleGoogleLogin" type="submit">Log in or Register with Google</button>
         <p v-for="(error, index) in formErrors" :key="index" class="error">{{ error }}</p>
         <p v-for="(error, index) in errors" :key="index" class="error">{{ error.message }}</p>
       </form>
@@ -71,6 +72,10 @@ export default {
         this.$store.dispatch('login', { email: this.email, password: this.password });
       }
     },
+    handleGoogleLogin(e) {
+      this.$store.dispatch('loginWithGoogle');
+      e.preventDefault();
+    },
     handleRegister(e) {
       if (!this.isRegister) {
         this.formErrors = [];
@@ -105,6 +110,9 @@ export default {
     margin-bottom: 84px;
     width: 233px;
   }
+  form {
+    padding-bottom: 36px;
+  }
   .toggle-btn {
     display: block;
     font-size: $font-size-16;
@@ -116,11 +124,9 @@ export default {
   #password-input {
     margin-bottom: 56px;
   }
-  .btn {
-    margin-bottom: 18px;
-  }
+  .btn,
   .btn-secondary {
-    margin-bottom: 54px;
+    margin-bottom: 18px;
   }
   .error {
     color: #D32F2F;

@@ -60,10 +60,23 @@ const store = new Vuex.Store({
         }
         dispatch('fetchUserProfile', user);
         commit('clearErrors');
-      } catch (e) {
-        console.error(e);
-        commit('setErrors', e);
+      } catch (error) {
+        console.error(error);
+        commit('setErrors', error);
       }
+    },
+    async loginWithGoogle({ commit, dispatch }) {
+      const { provider } = fb;
+      fb.auth
+        .signInWithPopup(provider)
+        .then((result) => {
+          const { user } = result;
+          dispatch('fetchUserProfile', user);
+          // ...
+        }).catch((error) => {
+          console.error(error);
+          commit('setErrors', error);
+        });
     },
     async fetchUserProfile({ commit, dispatch }, user) {
       const userProfile = await fb.usersCollection.doc(user.uid).get();
@@ -84,9 +97,9 @@ const store = new Vuex.Store({
         });
         dispatch('fetchUserProfile', user);
         commit('clearErrors');
-      } catch (e) {
-        console.error(e);
-        commit('setErrors', e);
+      } catch (error) {
+        console.error(error);
+        commit('setErrors', error);
       }
     },
     async logout({ commit }) {

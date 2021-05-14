@@ -21,6 +21,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 const fbStorage = firebase.storage();
+const provider = new firebase.auth.GoogleAuthProvider();
 
 // collection references
 const usersCollection = db.collection('users');
@@ -31,6 +32,7 @@ export {
   db,
   auth,
   fbStorage,
+  provider,
   usersCollection,
   robotsCollection,
 };
