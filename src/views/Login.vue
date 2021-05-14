@@ -13,7 +13,8 @@
         <input type="password" id="password-input" name="password" v-model="password">
         <button class="btn" @click="handleLogin" :type="isRegister? 'button' : 'submit'">Log in</button>
         <button class="btn-secondary" @click="handleRegister" :type="isRegister ? 'submit' : 'button'">Register</button>
-        <p v-for="(error, index) in formErrors" :key="index">{{error}}</p>
+        <p v-for="(error, index) in formErrors" :key="index" class="error">{{ error }}</p>
+        <p v-for="(error, index) in errors" :key="index" class="error">{{ error.message }}</p>
       </form>
     </section>
   </section>
@@ -21,8 +22,14 @@
 
 <script>
 import logo from '@/assets/logo.png';
+import { mapState } from 'vuex';
 
 export default {
+  computed: {
+    ...mapState([
+      'errors',
+    ]),
+  },
   data() {
     return {
       logo,
@@ -114,6 +121,9 @@ export default {
   }
   .btn-secondary {
     margin-bottom: 54px;
+  }
+  .error {
+    color: #D32F2F;
   }
 
   @media (max-width: $breakpoint-sm) {

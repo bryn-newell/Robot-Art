@@ -8,6 +8,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     user: null,
+    errors: [],
     isAdmin: false,
     robots: [],
     totalVotes: 0,
@@ -36,21 +37,33 @@ const store = new Vuex.Store({
     editRobot() {
       // TO DO
     },
+    setErrors(state, errors) {
+      state.errors = [...state.errors, errors];
+    },
+    clearErrors(state) {
+      state.errors = [];
+    },
   },
   actions: {
     // Users
-    async login({ dispatch }, form) {
-      let user;
-      // Since GCP auth doesn't have username/email sing in methods by default this is a temporary (to be changed in the future) hack to allow a username only for the Admin
-      if (form.email === 'Admin') {
-        const adminEmail = 'admin@mondorobot.com';
-        const res = await fb.auth.signInWithEmailAndPassword(adminEmail, form.password);
-        user = res.user;
-      } else {
-        const res = await fb.auth.signInWithEmailAndPassword(form.email, form.password);
-        user = res.user;
+    async login({ commit, dispatch }, form) {
+      try {
+        let user;
+        // Since GCP auth doesn't have username/email sing in methods by default this is a temporary (to be changed in the future) hack to allow a username only for the Admin
+        if (form.email === 'Admin') {
+          const adminEmail = 'admin@mondorobot.com';
+          const res = await fb.auth.signInWithEmailAndPassword(adminEmail, form.password);
+          user = res.user;
+        } else {
+          const res = await fb.auth.signInWithEmailAndPassword(form.email, form.password);
+          user = res.user;
+        }
+        dispatch('fetchUserProfile', user);
+        commit('clearErrors');
+      } catch (e) {
+        console.error(e);
+        commit('setErrors', e);
       }
-      dispatch('fetchUserProfile', user);
     },
     async fetchUserProfile({ commit, dispatch }, user) {
       const userProfile = await fb.usersCollection.doc(user.uid).get();
@@ -61,14 +74,20 @@ const store = new Vuex.Store({
         router.push('/robots');
       }
     },
-    async registerUser({ dispatch }, form) {
-      const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password);
-      await fb.usersCollection.doc(user.uid).set({
-        fullName: form.fullName,
-        isAdmin: false,
-        hasVoted: false,
-      });
-      dispatch('fetchUserProfile', user);
+    async registerUser({ commit, dispatch }, form) {
+      try {
+        const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password);
+        await fb.usersCollection.doc(user.uid).set({
+          fullName: form.fullName,
+          isAdmin: false,
+          hasVoted: false,
+        });
+        dispatch('fetchUserProfile', user);
+        commit('clearErrors');
+      } catch (e) {
+        console.error(e);
+        commit('setErrors', e);
+      }
     },
     async logout({ commit }) {
       await fb.auth.signOut();
