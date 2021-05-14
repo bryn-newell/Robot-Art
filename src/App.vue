@@ -1,6 +1,6 @@
 <template>
   <main id="app">
-    <Nav v-show="true" :mobileNavActive="mobileNavActive" @open-nav="mobileNavActive = true" @close-nav="mobileNavActive = false" />
+    <Nav v-show="showNav" :mobileNavActive="mobileNavActive" @open-nav="mobileNavActive = true" @close-nav="mobileNavActive = false" />
     <router-view v-show="!mobileNavActive" class="container"/>
   </main>
 </template>
